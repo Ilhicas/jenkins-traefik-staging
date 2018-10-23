@@ -1,13 +1,11 @@
 //This is a scripted pipeline syntax and not the declarative pipeline syntax
 node('docker'){
     checkout scm
-     def branch = sh(returnStdout: true, script: 'git branch')
-     echo branch
     sh '''cat > docker-compose.staging.yml <<EOL
 version: "3.6"
 services:
   app:
-    image: andreilhicas/responder-${branch}
+    image: andreilhicas/responder-${BUILD_NUMBER}
     labels:
       - "traefik.frontend.rule=Host:staging.docker.localhost;PathPrefixStrip:/build-${BUILD_NUMBER}"
       - "traefik.backend=app-${BUILD_NUMBER}"
