@@ -17,10 +17,10 @@ services:
         - "traefik.backend=jenkins"
         - "traefik.enable=true"
         - "traefik.port=8080"
-        - "traefik.docker.network=${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik"
+        - "traefik.docker.network=jenkins_staging_traefik"
         - "traefik.frontend.headers.SSLRedirect=true"
         - "traefik.frontend.entryPoints=http,https"
-        - "traefik.tags=${COMPOSE_PROJECT_NAME:-jenkins_staging}"
+        - "traefik.tags=jenkins_staging"
       networks:
         - ci-network
         - traefik # We add jenkins to the same network as Traefik
@@ -44,6 +44,6 @@ volumes:
   jenkins_home:
 networks:
   traefik:
-    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik
+    name: jenkins_staging_traefik
   ci-network:
-    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_ci_network
+    name: jenkins_staging_ci_network

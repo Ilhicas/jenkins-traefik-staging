@@ -10,12 +10,12 @@ services:
       - "traefik.backend=app-${BUILD_NUMBER}"
       - "traefik.enable=true"
       - "traefik.port=5000"
-      - "traefik.docker.network=${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik"
+      - "traefik.docker.network=jenkins_staging_traefik"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.frontend.entryPoints=http,https"
-      - "traefik.tags=${COMPOSE_PROJECT_NAME:-jenkins_staging}"
+      - "traefik.tags=jenkins_staging"
 
 EOL'''
-    sh 'docker-compose -f docker-compose.app.yml -f docker-compose.staging.yml up -d'
+    sh 'docker-compose -p staging_${BUILD_NUMBER} -f docker-compose.app.yml -f docker-compose.staging.yml up -d'
     sh 'echo new Staging environment Now available at https://staging.docker.localhost/build-${BUILD_NUMBER}/hello'
 }
