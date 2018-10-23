@@ -1,0 +1,14 @@
+version: '3.6'
+services:
+  app:
+    image: andreilhicas/responder:app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    expose:
+      - 5000
+    networks:
+      - traefik
+networks:
+  traefik:
+    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik

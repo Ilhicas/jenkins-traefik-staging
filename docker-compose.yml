@@ -1,0 +1,49 @@
+version: '3.6'
+services:
+  jenkins:
+      image: "andreilhicas/jenkins"
+      build:
+        context: ./jenkins
+        dockerfile: Dockerfile
+      expose:
+        - 8080
+        - 50000
+      environment:
+        - "JENKINS_OPTS=--prefix=/jenkins"
+      volumes:
+        - jenkins_home:/var/jenkins_home
+      labels:
+        - "traefik.frontend.rule=Host:docker.localhost;PathPrefix:/jenkins"
+        - "traefik.backend=jenkins"
+        - "traefik.enable=true"
+        - "traefik.port=8080"
+        - "traefik.docker.network=${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik"
+        - "traefik.frontend.headers.SSLRedirect=true"
+        - "traefik.frontend.entryPoints=http,https"
+        - "traefik.tags=${COMPOSE_PROJECT_NAME:-jenkins_staging}"
+      networks:
+        - ci-network
+        - traefik # We add jenkins to the same network as Traefik
+  jenkins-docker-slave:
+      image: "andreilhicas/jenkins-docker-slave"
+      build:
+        context: ./jenkins-slave-docker
+        dockerfile: Dockerfile
+      command: java -jar /usr/share/jenkins/slave.jar -noCertificateCheck -workDir /home/jenkins/agent -jnlpUrl http://jenkins:8080/jenkins/computer/Docker%20Launcher/slave-agent.jnlp -jnlpCredentials slave:changethis
+      environment:
+        #Check docs at https://github.com/jenkinsci/docker-ssh-slave
+        - JENKINS_SLAVE_SSH_PUBKEY=ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDrFvXVMFSWaAkGgqRgCZdPP25fSy/GXA5Ba9NGF15/YZ0sk2gsz4HRGgeFjUo3e1+rlS7I3RaigazFrUgYH1BwZbZoR6jmSfu/xB33GxY7h5R5MSnLrGMxoHKsOmLiEcdW+jJcx5emDAjByF/EN6wIvkXBhAqymMI3ExfghkWcD+V0qFHMAK/ncfkYSwm7ie8PrauygbA0P9NLBHyAazkIW/oR4ujeEWPAldbIu9vY3QL4h0z6VIbaHmdicIS3vrNZchISFrlSwZchQjwqCOCIn6+f83rkqwYKtnSs6VkU+C+ng+/+JEr8/fT1zoQl6DK4WrT7BGNlJfOxfWAeVkxNOV3tK2qHPfmsOuSDFvTUOgWM7DEM/J+V4GEu4zsCPMss6NuC53Pw6MWnKyuYn4r2Wi4CHlIxLiwtBJ4WlRh7kVlTTuzjW9IFR9+lWd4BrMFmXOF4V0OcK+z+C+mgSbFFjnxOopCVJoKyh2Q9zN/KZry39LXSNf01z9nYzjb5z8IkXNsCseb7I67C/hE3gd+4I0Qxg6z3hp82m73p2te8I7qKITwekoAL/4vrMoqrN0p27keSsmT+j17yjgmTHDQOsVAdtPY8yM08xNRKQUvNXktbQgsbdgIwstF7kjRPlvUmCpWXAvZdG7RzbHUYJFVFjpRwQBSnv8jnRzKvqnAf8Q==
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock # We must expose the Socket to the slave that will be responsible for launching Containers alongside. Avoiding DIND | And avoiding exposure in jenkins container itself
+      expose:
+        - 22
+      networks:
+        - ci-network
+        #We don't need to expose this slave to traefik
+volumes:
+  jenkins_home:
+networks:
+  traefik:
+    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik
+  ci-network:
+    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_ci_network

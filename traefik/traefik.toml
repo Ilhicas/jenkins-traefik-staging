@@ -1,0 +1,59 @@
+# Global configuration
+################################################################
+
+# Enable debug mode
+#
+# Optional
+# Default: false
+#
+debug = true
+
+# Log level
+#
+# Optional
+# Default: "ERROR"
+#
+logLevel = "DEBUG"
+
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+      [[entryPoints.https.tls.certificates]]
+      CertFile = "/certificates/server-cert.pem"
+      KeyFile = "/certificates/server-key.pem"
+  [entryPoints.traefik]
+  address = ":1936"
+# API definition
+# Warning: Enabling API will expose Traefik's configuration.
+# It is not recommended in production,
+# unless secured by authentication and authorizations
+[api]
+  entryPoint = "traefik"
+  dashboard = true
+  debug = true
+
+[docker]
+
+# Docker server endpoint. Can be a tcp or a unix socket endpoint.
+#
+# Required
+#
+endpoint = "unix:///var/run/docker.sock"
+
+# Default base domain used for the frontend rules.
+# Can be overridden by setting the "traefik.domain" label on a container.
+#
+# Required
+#
+domain = "docker.localhost"
+
+# Enable watch docker changes.
+#
+# Optional
+#
+watch = true

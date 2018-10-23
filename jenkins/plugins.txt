@@ -1,0 +1,5 @@
+blueocean
+pipeline-stage-view
+credentials
+ssh-credentials
+ssh-slaves

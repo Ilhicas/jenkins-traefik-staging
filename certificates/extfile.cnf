@@ -1,0 +1,7 @@
+subjectAltName = DNS:,IP:
+subjectAltName = DNS:,IP:
+subjectAltName = DNS:ilhicas.com,IP:10.10.10.20
+subjectAltName = DNS:ilhicas.com,IP:10.10.10.20
+subjectAltName = DNS:ilhicas.com,IP:10.10.10.20
+subjectAltName = DNS:ilhicas.com,IP:10.10.10.20
+subjectAltName = DNS:example.com,IP:127.0.0.1

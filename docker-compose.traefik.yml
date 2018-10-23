@@ -1,0 +1,18 @@
+version: '3.6'
+services:
+  traefik:
+    image: traefik:alpine
+    command: --api --docker --docker.domain=docker.localhost --docker.endpoint="unix:///var/run/docker.sock" --constraints=tag==${COMPOSE_PROJECT_NAME:-jenkins_staging}  # Entrypoint for traefik in order to be used with docker api hence the socket exposure below | Contraints limit to visibility of this Stack only by project name
+    ports:
+      - "80:80"
+      - "443:443"
+      - "1936:1936"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock  # We must expose socket to Traefik
+      - ./traefik/traefik.toml:/etc/traefik/traefik.toml
+      - ./certificates:/certificates # In order to use our self signed certificates for ssl termination
+    networks:
+      - traefik
+networks:
+  traefik:
+    name: ${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik
