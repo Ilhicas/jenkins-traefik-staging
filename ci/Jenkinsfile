@@ -1,6 +1,6 @@
 //This is a scripted pipeline syntax and not the declarative pipeline syntax
 node('docker'){
-    scm checkout
+    checkout scm
     sh '''cat > docker-compose.staging.yml <<EOL
 version: "3"
 services:
