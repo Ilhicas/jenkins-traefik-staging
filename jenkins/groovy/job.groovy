@@ -27,9 +27,9 @@ def createJob(job, parent)
 }
 
 def configuration = [:]
-configuration.name = "Blog Example Job"
-configuration.description = "Blog Example for staging"
-configuration.gitUrl = "https://github.com/Ilhicas/jekyll-docker-base.git"
+configuration.name = "Python Responder Sample Job"
+configuration.description = "Python Responder Sample Job"
+configuration.gitUrl = "https://github.com/Ilhicas/jenkins-traefik-staging.git"
 configuration.branch = "master"
 configuration.jenkinsfilePath = "ci/Jenkinsfile"
 
