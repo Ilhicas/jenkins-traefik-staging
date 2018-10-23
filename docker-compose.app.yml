@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   app:
-    image: andreilhicas/responder:app_${BUILD_ID}
+    image: andreilhicas/responder
     build:
       context: ./app
       dockerfile: Dockerfile
