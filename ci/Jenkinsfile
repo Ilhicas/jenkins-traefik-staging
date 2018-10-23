@@ -13,6 +13,7 @@ services:
       - "traefik.docker.network=${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik"
       - "traefik.frontend.headers.SSLRedirect=true"
       - "traefik.frontend.entryPoints=http,https"
+      - "traefik.tags=${COMPOSE_PROJECT_NAME:-jenkins_staging}"
 
 EOL'''
     sh 'docker-compose -f docker-compose.app.yml -f docker-compose.staging.yml up -d'
