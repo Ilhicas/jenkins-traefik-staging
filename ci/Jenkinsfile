@@ -2,7 +2,7 @@
 node('docker'){
     checkout scm
     sh '''cat > docker-compose.staging.yml <<EOL
-version: "3"
+version: "3.6"
 services:
   blog:
     labels:
