@@ -17,5 +17,5 @@ services:
 
 EOL'''
     sh 'docker-compose -f docker-compose.app.yml -f docker-compose.staging.yml up -d'
-    sh 'echo new Staging environment Now available at https://staging.docker.localhost/build-${BUILD_NUMBER}'
+    sh 'echo new Staging environment Now available at https://staging.docker.localhost/build-${BUILD_NUMBER}/hello'
 }
