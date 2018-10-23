@@ -5,7 +5,7 @@ node('docker'){
 version: "3.6"
 services:
   app:
-    image: andreilhicas/responder-${GIT_COMMIT}
+    image: andreilhicas/responder-${BRANCH_NAME}
     labels:
       - "traefik.frontend.rule=Host:staging.docker.localhost;PathPrefixStrip:/build-${BUILD_NUMBER}"
       - "traefik.backend=app-${BUILD_NUMBER}"
