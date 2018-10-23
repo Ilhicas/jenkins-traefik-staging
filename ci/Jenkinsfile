@@ -2,6 +2,7 @@
 node('docker'){
     checkout scm
      def branch = sh(returnStdout: true, script: 'git branch')
+     echo branch
     sh '''cat > docker-compose.staging.yml <<EOL
 version: "3.6"
 services:
