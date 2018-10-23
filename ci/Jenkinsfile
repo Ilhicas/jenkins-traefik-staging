@@ -7,7 +7,7 @@ services:
   app:
     labels:
       - "traefik.frontend.rule=Host:staging.docker.localhost, PathPrefixStrip://build-${BUILD_NUMBER}"
-      - "traefik.backend=jenkins"
+      - "traefik.backend=app-${BUILD_NUMBER}"
       - "traefik.enable=true"
       - "traefik.port=5000"
       - "traefik.docker.network=${COMPOSE_PROJECT_NAME:-jenkins_staging}_traefik"
